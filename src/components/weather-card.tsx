@@ -1,5 +1,5 @@
 import { Cloud, CloudFog, CloudRain, CloudSunRain, Droplets, Sun } from 'lucide-react'
-
+import Image from 'next/image'
 
 interface WeatherCardProps {
   date: string
@@ -8,14 +8,11 @@ interface WeatherCardProps {
   isTomorrow?: boolean
   isDayAfter?: boolean
   temperature: number
-  icon?: string
 }
 
-export function WeatherCard({ date, humidity, temperature, isToday = false, isTomorrow = false, isDayAfter = false, icon }: Readonly<WeatherCardProps>) {
+export function WeatherCard({ date, humidity, temperature, isToday = false, isTomorrow = false, isDayAfter = false }: Readonly<WeatherCardProps>) {
   const weatherIcon = () => {
-    if (icon) {
-      return <img src={`http://openweathermap.org/img/wn/${icon}.png`} alt="Weather icon" className="w-10 h-10" />
-    }
+    
     if (humidity <= 40) return <Sun className="h-6 text-yellow-600 w-6" />
     if (humidity >= 90) return <CloudFog className="h-6 text-teal-600 w-6" />
     if (humidity >= 70) return <CloudRain className="h-6 text-blue-700 w-6" />
