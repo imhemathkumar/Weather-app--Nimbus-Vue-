@@ -4,6 +4,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect } from 'react'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
+import type { LeafletMouseEvent } from 'leaflet'
 
 // Fix for default marker icon
 delete (L.Icon.Default.prototype as any)._getIconUrl
@@ -15,9 +16,7 @@ L.Icon.Default.mergeOptions({
 
 interface LeafletMapProps {
   center: [number, number]
- position: [number, number]
-  zoom: number
-  onLocationSelect: (lat: number, lng: number) => void
+  onLocationSelect: (lat: number, lon: number) => void
   weatherInfo?: {
     temperature: number
     condition: string
@@ -30,7 +29,7 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: 
   useEffect(() => {
     if (!map) return
 
-    const handleClick = (e: L.LeafletMouseEvent) => {
+    const handleClick = (e: LeafletMouseEvent) => {
       const { lat, lng } = e.latlng
       onLocationSelect(lat, lng)
     }
