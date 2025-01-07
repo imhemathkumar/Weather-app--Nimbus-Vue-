@@ -158,7 +158,7 @@ export default function WeatherApp() {
 
   useEffect(() => {
     getInitialWeatherData()
-  }, [])
+  }, [getInitialWeatherData])
 
   
   if (!mounted) {
