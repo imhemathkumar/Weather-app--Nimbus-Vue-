@@ -15,7 +15,9 @@ L.Icon.Default.mergeOptions({
 
 interface LeafletMapProps {
   center: [number, number]
-  onLocationSelect: (lat: number, lon: number) => void
+ position: [number, number]
+  zoom: number
+  onLocationSelect: (lat: number, lng: number) => void
   weatherInfo?: {
     temperature: number
     condition: string
