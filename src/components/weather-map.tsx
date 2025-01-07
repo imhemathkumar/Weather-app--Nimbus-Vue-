@@ -28,6 +28,7 @@ const LeafletMap = dynamic(() => import('./leaflet-map'), {
 interface WeatherMapProps {
   onLocationSelect: (lat: number, lon: number) => void
   center: [number, number]
+  initialPosition?: LatLngExpression
   weatherInfo?: {
     temperature: number
     condition: string
@@ -61,25 +62,23 @@ function ChangeView({ center }: { center: [number, number] }) {
   return null
 }
 
-export function WeatherMap({ onLocationSelect, center, weatherInfo }: Readonly<WeatherMapProps>) {
+export default function WeatherMap({ onLocationSelect, initialPosition = [51.505, -0.09] }: WeatherMapProps) {
   const [mapError, setMapError] = useState<string | null>(null)
+
 
   if (typeof window === 'undefined') {
     return null // Return null on the server side
   }
 
   return (
-    <div className="h-[400px] w-full rounded-lg overflow-hidden">
-      {mapError ? (
-        <div className="h-full w-full flex items-center justify-center bg-gray-200 text-gray-600">
-          {mapError}
-        </div>
-      ) : (
-        <LeafletMap
-          center={center}
-          onLocationSelect={onLocationSelect}
-          weatherInfo={weatherInfo}
-        />
+   <div className="h-[400px] w-full rounded-lg overflow-hidden">
+      <LeafletMap
+        position={initialPosition as [number, number]}
+        zoom={13}
+        onLocationSelect={onLocationSelect}
+      />
+      {mapError && (
+        <div className="text-red-500 mt-2">{mapError}</div>
       )}
     </div>
   )
