@@ -155,7 +155,7 @@ export default function WeatherApp() {
       // Fallback to a default location (e.g., New York City)
       fetchWeatherData(40.7128, -74.0060)
     }
-  }, [])
+  }, [fetchWeatherData])
 
   useEffect(() => {
     getInitialWeatherData()
