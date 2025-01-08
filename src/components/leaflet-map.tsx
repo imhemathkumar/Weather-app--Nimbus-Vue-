@@ -22,8 +22,6 @@ interface LeafletMapProps {
   };
 }
 
-// Define a custom type for Leaflet click events
-type MapClickEvent = L.LeafletMouseEvent;
 
 function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: number) => void }) {
   const map = useMap();
