@@ -1,20 +1,9 @@
 'use client';
 
-import * as L from 'leaflet';
+import { useEffect, useState } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { useEffect } from 'react';
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
-
-// Fix for default marker icon
-const customIcon = (L as any).icon({
-  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
-  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
-  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-  shadowSize: [41, 41]
-});
 
 interface LeafletMapProps {
   center: [number, number];
@@ -25,46 +14,51 @@ interface LeafletMapProps {
   };
 }
 
+const customIcon = new L.Icon({
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
+});
+
 function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: number) => void }) {
-  const map = useMap();
-
-  useEffect(() => {
-    if (!map) return;
-
-    const handleClick = (e: L.LeafletMouseEvent) => {
-      const { lat, lng } = e.latlng;
-      onLocationSelect(lat, lng);
-    };
-
-    map.on('click', handleClick);
-
-    return () => {
-      map.off('click', handleClick);
-    };
-  }, [map, onLocationSelect]);
-
+  useMapEvents({
+    click(e) {
+      onLocationSelect(e.latlng.lat, e.latlng.lng);
+    },
+  });
   return null;
 }
 
 function ChangeView({ center }: { center: [number, number] }) {
   const map = useMap();
-
   useEffect(() => {
     map.setView(center, map.getZoom());
   }, [center, map]);
-
   return null;
 }
 
 export default function LeafletMap({ center, onLocationSelect, weatherInfo }: LeafletMapProps) {
+  const [map, setMap] = useState<L.Map | null>(null);
+
+  useEffect(() => {
+    if (map) {
+      map.invalidateSize();
+    }
+  }, [map]);
+
   return (
     <MapContainer 
       center={center}
       zoom={13}
       style={{ height: '100%', width: '100%' }}
+      whenCreated={setMap}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openweathermap.org/copyright">OpenStreetMap</a> contributors'
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Marker position={center} icon={customIcon}>
