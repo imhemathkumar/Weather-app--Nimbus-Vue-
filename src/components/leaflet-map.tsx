@@ -1,58 +1,59 @@
 'use client'
 
-import * as L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-import { useEffect } from 'react'
-import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
-import type { Map as LeafletMap } from 'leaflet'
+import * as L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import { useEffect } from 'react';
+import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
 // Fix for default marker icon
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 delete (L as any).Icon.Default.prototype._getIconUrl;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (L as any).Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
-})
+});
 
 interface LeafletMapProps {
-  center: [number, number]
-  onLocationSelect: (lat: number, lon: number) => void
+  center: [number, number];
+  onLocationSelect: (lat: number, lon: number) => void;
   weatherInfo?: {
-    temperature: number
-    condition: string
-  }
+    temperature: number;
+    condition: string;
+  };
 }
 
 function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: number) => void }) {
-  const map = useMap() as unknown as LeafletMap
+  const map = useMap();
 
   useEffect(() => {
-    if (!map) return
+    if (!map) return;
 
-    const handleClick = (e: L.LeafletEvent) => {
-      const { lat, lng } = (e as L.LeafletMouseEvent).latlng
-      onLocationSelect(lat, lng)
-    }
+    const handleClick = (e: L.LeafletMouseEvent) => {
+      const { lat, lng } = e.latlng;
+      onLocationSelect(lat, lng);
+    };
 
-    map.on('click', handleClick)
+    map.on('click', handleClick);
 
     return () => {
-      map.off('click', handleClick)
-    }
-  }, [map, onLocationSelect])
+      map.off('click', handleClick);
+    };
+  }, [map, onLocationSelect]);
 
-  return null
+  return null;
 }
 
 function ChangeView({ center }: { center: [number, number] }) {
-  const map = useMap() as unknown as LeafletMap
-  map.setView(center, map.getZoom())
-  return null
+  const map = useMap();
+
+  useEffect(() => {
+    map.setView(center, map.getZoom());
+  }, [center, map]);
+
+  return null;
 }
 
-export default function LeafletMap({ center, onLocationSelect, weatherInfo }: Readonly<LeafletMapProps>) {
+export default function LeafletMap({ center, onLocationSelect, weatherInfo }: LeafletMapProps) {
   return (
     <MapContainer 
       center={center}
@@ -76,6 +77,5 @@ export default function LeafletMap({ center, onLocationSelect, weatherInfo }: Re
       <MapEvents onLocationSelect={onLocationSelect} />
       <ChangeView center={center} />
     </MapContainer>
-  )
+  );
 }
-
