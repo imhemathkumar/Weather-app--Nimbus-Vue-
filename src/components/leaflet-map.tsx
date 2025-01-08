@@ -28,7 +28,7 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: 
   useEffect(() => {
     if (!map) return;
 
-    const handleClick = (e: L.LeafletMouseEvent & { latlng: L.LatLng }) => {
+    const handleClick = (e: L.LeafletMouseEvent) => {
       const { lat, lng } = e.latlng;
       onLocationSelect(lat, lng);
     };
@@ -79,3 +79,4 @@ export default function LeafletMap({ center, onLocationSelect, weatherInfo }: Le
     </MapContainer>
   );
 }
+
