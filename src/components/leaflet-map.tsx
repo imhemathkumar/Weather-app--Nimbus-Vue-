@@ -22,16 +22,18 @@ interface LeafletMapProps {
   };
 }
 
-
 function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: number) => void }) {
   const map = useMap();
 
   useEffect(() => {
     if (!map) return;
 
-    const handleClick = (e: L.LeafletMouseEvent) => {
-      const { lat, lng } = e.latlng;
-      onLocationSelect(lat, lng);
+    const handleClick = (e: L.LeafletMouseEvent | L.LeafletEvent) => {
+      // Check if the event has latlng, which is only present in mouse events
+      if ('latlng' in e) {
+        const { lat, lng } = e.latlng;
+        onLocationSelect(lat, lng);
+      }
     };
 
     map.on('click', handleClick);
@@ -80,4 +82,3 @@ export default function LeafletMap({ center, onLocationSelect, weatherInfo }: Le
     </MapContainer>
   );
 }
-
