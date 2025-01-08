@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import type { Map as LeafletMap } from 'leaflet'
+import { Map as LeafletMap } from 'leaflet'
 
 const LeafletMap = dynamic(() => import('./leaflet-map'), {
   ssr: false,
