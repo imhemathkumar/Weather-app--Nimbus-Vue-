@@ -4,6 +4,7 @@ import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect } from 'react'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
+import { Map as LeafletMap } from 'leaflet'
 
 // Fix for default marker icon
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,7 +26,7 @@ interface LeafletMapProps {
 }
 
 function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: number) => void }) {
-  const map = useMap() as L.Map
+  const map = useMap() as LeafletMap
 
   useEffect(() => {
     if (!map) return
@@ -46,7 +47,7 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: 
 }
 
 function ChangeView({ center }: { center: [number, number] }) {
-  const map = useMap() as L.Map
+  const map = useMap() as LeafletMap
   map.setView(center, map.getZoom())
   return null
 }
