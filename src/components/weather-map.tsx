@@ -1,8 +1,9 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { Map as LeafletMap } from 'leaflet'
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet' // Use the correct imports for React-Leaflet
 
+// Dynamically import your custom map component (make sure it's the correct one)
 const LeafletMap = dynamic(() => import('./leaflet-map'), {
   ssr: false,
   loading: () => <p>Loading map...</p>,
@@ -24,6 +25,7 @@ export function WeatherMap({ onLocationSelect, center, weatherInfo }: Readonly<W
 
   return (
     <div className="h-[400px] w-full rounded-lg overflow-hidden">
+      {/* Use the LeafletMap component */}
       <LeafletMap
         center={center}
         onLocationSelect={onLocationSelect}
@@ -32,4 +34,3 @@ export function WeatherMap({ onLocationSelect, center, weatherInfo }: Readonly<W
     </div>
   )
 }
-
