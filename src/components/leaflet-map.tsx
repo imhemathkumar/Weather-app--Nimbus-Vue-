@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import * as L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -22,21 +22,26 @@ interface LeafletMapProps {
   };
 }
 
+// Define a custom type for Leaflet click events
+type MapClickEvent = {
+  latlng: L.LatLng;
+};
+
 function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: number) => void }) {
   const map = useMap();
 
   useEffect(() => {
     if (!map) return;
 
-    const handleClick = (e: L.LeafletMouseEvent | L.LeafletEvent) => {
-      const { lat, lng } = (e as L.LeafletMouseEvent).latlng; // Type assertion for latlng
+    const handleClick = (e: MapClickEvent) => {
+      const { lat, lng } = e.latlng;
       onLocationSelect(lat, lng);
     };
 
-    map.on('click', handleClick);
+    map.on('click', handleClick as any); // Cast to `any` to avoid type errors
 
     return () => {
-      map.off('click', handleClick);
+      map.off('click', handleClick as any);
     };
   }, [map, onLocationSelect]);
 
