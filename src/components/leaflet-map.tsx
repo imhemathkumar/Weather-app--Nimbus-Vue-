@@ -1,13 +1,13 @@
 'use client';
 
-import * as L from 'leaflet';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
 // Fix for default marker icon
-delete (L as unknown as { Icon: { Default: { prototype: { _getIconUrl: unknown } } } }).Icon.Default.prototype._getIconUrl;
-(L as unknown as { Icon: { Default: { mergeOptions: (options: Record<string, string>) => void } } }).Icon.Default.mergeOptions({
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
   shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
@@ -28,9 +28,8 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: 
   useEffect(() => {
     if (!map) return;
 
-  const handleClick = (e: L.LeafletEvent) => {
-      const lat = e.latlng.lat;
-      const lng = e.latlng.lng;
+    const handleClick = (e: L.LeafletMouseEvent) => {
+      const { lat, lng } = e.latlng;
       onLocationSelect(lat, lng);
     };
 
@@ -62,7 +61,7 @@ export default function LeafletMap({ center, onLocationSelect, weatherInfo }: Le
       style={{ height: '100%', width: '100%' }}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution='&copy; <a href="https://www.openweathermap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       <Marker position={center}>
@@ -80,3 +79,4 @@ export default function LeafletMap({ center, onLocationSelect, weatherInfo }: Le
     </MapContainer>
   );
 }
+
