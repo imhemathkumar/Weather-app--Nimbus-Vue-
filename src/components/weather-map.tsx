@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
- import { LeafletMap } from 'leaflet'
+ import L from 'leaflet'
 
 // Dynamically import your custom map component (make sure it's the correct one)
 const LeafletMap = dynamic(() => import('./leaflet-map'), {
