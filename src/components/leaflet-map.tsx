@@ -1,6 +1,6 @@
 'use client'
 
-import { Map as LeafletMap, LeafletMouseEvent } from 'leaflet'
+import { LeafletMouseEvent } from 'leaflet'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect } from 'react'
