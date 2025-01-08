@@ -28,10 +28,8 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: 
   useEffect(() => {
     if (!map) return;
 
-    const handleClick = (e: L.Event) => {
-      // Type assertion to access latlng
-      const mouseEvent = e as L.LeafletMouseEvent;
-      const { lat, lng } = mouseEvent.latlng;
+   const handleClick = (e: L.LeafletMouseEvent) => {
+      const { lat, lng } = e.latlng;
       onLocationSelect(lat, lng);
     };
 
