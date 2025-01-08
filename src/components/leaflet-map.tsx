@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -24,56 +24,67 @@ const customIcon = {
   shadowSize: [41, 41]
 };
 
-function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: number) => void }) {
-  useMapEvents({
-    click(e) {
-      onLocationSelect(e.latlng.lat, e.latlng.lng);
-    },
-  });
-  return null;
-}
+//function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: number) => void }) {
+//  useMapEvents({
+//    click(e) {
+//      onLocationSelect(e.latlng.lat, e.latlng.lng);
+//    },
+//  });
+//  return null;
+//}
 
-function ChangeView({ center }: { center: [number, number] }) {
-  const map = useMap();
-  useEffect(() => {
-    map.setView(center, map.getZoom());
-  }, [center, map]);
-  return null;
-}
+//function ChangeView({ center }: { center: [number, number] }) {
+//  const map = useMap();
+//  useEffect(() => {
+//    map.setView(center, map.getZoom());
+//  }, [center, map]);
+//  return null;
+//}
 
 export default function LeafletMap({ center, onLocationSelect, weatherInfo }: LeafletMapProps) {
-  const [map, setMap] = useState<L.Map | null>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const markerRef = useRef<L.Marker | null>(null);
 
   useEffect(() => {
-    if (map) {
-      map.invalidateSize();
-    }
-  }, [map]);
+    if (!mapRef.current) {
+      mapRef.current = L.map('map').setView(center, 13);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      }).addTo(mapRef.current);
 
-  return (
-    <MapContainer 
-      center={center}
-      zoom={13}
-      style={{ height: '100%', width: '100%' }}
-      whenCreated={setMap}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={center} icon={customIcon as L.IconOptions}>
-        {weatherInfo && (
-          <Popup>
-            <div className="text-center">
-              <div className="text-lg font-bold">{weatherInfo.temperature}°C</div>
-              <div className="text-sm">{weatherInfo.condition}</div>
-            </div>
-          </Popup>
-        )}
-      </Marker>
-      <MapEvents onLocationSelect={onLocationSelect} />
-      <ChangeView center={center} />
-    </MapContainer>
-  );
+      mapRef.current.on('click', (e: L.LeafletMouseEvent) => {
+        onLocationSelect(e.latlng.lat, e.latlng.lng);
+      });
+    } else {
+      mapRef.current.setView(center);
+    }
+
+    // Update or create marker
+    if (markerRef.current) {
+      markerRef.current.setLatLng(center);
+    } else {
+      markerRef.current = L.marker(center, { icon: L.icon(customIcon) }).addTo(mapRef.current);
+    }
+
+    // Update popup content
+    if (weatherInfo) {
+      markerRef.current.bindPopup(`
+        <div class="text-center">
+          <div class="text-lg font-bold">${weatherInfo.temperature}°C</div>
+          <div class="text-sm">${weatherInfo.condition}</div>
+        </div>
+      `).openPopup();
+    }
+
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+      markerRef.current = null;
+    };
+  }, [center, onLocationSelect, weatherInfo]);
+
+  return <div id="map" style={{ height: '100%', width: '100%' }}></div>;
 }
 
