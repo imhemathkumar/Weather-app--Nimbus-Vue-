@@ -6,18 +6,16 @@ import { useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
 // Fix for default marker icon
-if (L.Icon) {
-  // We cast to the Icon constructor directly
-  const iconPrototype = L.Icon.Default.prototype as L.IconOptions;
+// Directly modify L.Icon.Default without checking for L.Icon
+const iconPrototype = L.Icon.Default.prototype as L.IconOptions;
 
-  if (iconPrototype._getIconUrl) {
-    delete iconPrototype._getIconUrl;
-    L.Icon.Default.mergeOptions({
-      iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
-      iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
-    });
-  }
+if (iconPrototype._getIconUrl) {
+  delete iconPrototype._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
+  });
 }
 
 interface LeafletMapProps {
