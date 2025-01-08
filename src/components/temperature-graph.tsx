@@ -95,7 +95,7 @@ export function TemperatureGraph({ data, labels }: Readonly<TemperatureGraphProp
         padding: 12,
         titleFont: {
           size: 14,
-          weight: 'normal',
+          weight: 'normal' as const,
         },
         bodyFont: {
           size: 14,
