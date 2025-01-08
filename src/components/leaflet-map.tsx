@@ -28,8 +28,9 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: 
   useEffect(() => {
     if (!map) return;
 
-   const handleClick = (e: L.LeafletMouseEvent) => {
-      const { lat, lng } = e.latlng;
+  const handleClick = (e: L.LeafletEvent) => {
+      const lat = e.latlng.lat;
+      const lng = e.latlng.lng;
       onLocationSelect(lat, lng);
     };
 
