@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
 
 // Fix for default marker icon
+// eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 delete (L.Icon.Default.prototype as { _getIconUrl?: Function })._getIconUrl
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
