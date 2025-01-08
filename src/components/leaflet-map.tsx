@@ -1,3 +1,5 @@
+declare module 'leaflet';
+
 'use client'
 
 import L from 'leaflet'
