@@ -30,14 +30,15 @@ export function WeatherDisplay({
   const firstSixTemperatures = hourlyTemperatures.slice(0, 6);
   return (
     <div className="bg-gray-900/30 backdrop-blur-sm rounded-lg p-6 text-white">
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row items-start justify-between gap-4">
         <div>
-          <div className="text-8xl text-teal-600 font-light">{temperature}°C</div>
-          <h1 className="text-4xl text-amber-600 font-semibold mt-2">{location}</h1>
-          <p className="text-lg mt-1">{date}</p>
+          <div className="text-6xl sm:text-8xl text-teal-600 font-light">{temperature}°C</div>
+          <h1 className="text-2xl sm:text-4xl text-amber-600 font-semibold mt-2">{location}</h1>
+          <p className="text-base sm:text-lg mt-1">{date}</p>
         </div>
-        <div className="flex items-center gap-2 text-xl">
-        {weatherIcon()}<span>{condition}</span>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2 text-xl">
+            {weatherIcon()}<span>{condition}</span>
           </div>
           <div className="flex items-center gap-2">
             <Droplets className="h-4 text-blue-500 w-4" />
@@ -45,7 +46,8 @@ export function WeatherDisplay({
             <span className="font-semibold text-green-500">{humidity}%</span>
           </div>
         </div>
-      
+      </div>
+
       <div className="grid grid-cols-2 gap-4 mt-6">
         <div className="flex items-center gap-2 bg-white/5 rounded-lg p-3">
           <Gauge className="h-5 text-red-600 w-5" />
@@ -59,16 +61,19 @@ export function WeatherDisplay({
         </div>
       </div>
       <div className="grid grid-cols-1 gap-4 mt-6">
-      <div className="flex items-center gap-2 bg-white/5 rounded-lg p-3">
-        {weatherIcon()}
-          <span>Hourly Temperatures</span>
-          <span className="font-semibold ml-auto">
-                      {firstSixTemperatures.map((temp, index) => (
-                        <span key={`temp-${temp}-${index}`}>{temp} <span className='pr-1 text-pink-700 text-sm'>°C <span className='text-xl text-gray-400 pr-1'>|</span></span>  </span>
-                      ))}
-          </span>
+        <div className="flex flex-wrap items-center gap-2 bg-white/5 rounded-lg p-3">
+          {weatherIcon()}
+          <span className="text-white/70">Hourly Temperatures</span>
+          <div className="w-full mt-2 grid grid-cols-3 sm:grid-cols-6 gap-2">
+            {firstSixTemperatures.map((temp, index) => (
+              <div key={`temp-${temp}-${index}`} className="flex items-center justify-center bg-white/5 rounded p-2">
+                <span className="text-green-500">{temp}</span>
+                <span className="text-pink-700 text-sm ml-1">°C</span>
+              </div>
+            ))}
+          </div>
         </div>
-        </div>
+      </div>
     </div>
   )
 }
