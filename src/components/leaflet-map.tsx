@@ -6,9 +6,7 @@ import { useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
 // Fix for default marker icon
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 delete (L as unknown as { Icon: { Default: { prototype: { _getIconUrl: unknown } } } }).Icon.Default.prototype._getIconUrl;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (L as unknown as { Icon: { Default: { mergeOptions: (options: Record<string, string>) => void } } }).Icon.Default.mergeOptions({
   iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
@@ -25,9 +23,7 @@ interface LeafletMapProps {
 }
 
 // Define a custom type for Leaflet click events
-type MapClickEvent = {
-  latlng: L.LatLng;
-};
+type MapClickEvent = L.LeafletMouseEvent;
 
 function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: number) => void }) {
   const map = useMap();
@@ -35,15 +31,15 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: 
   useEffect(() => {
     if (!map) return;
 
-    const handleClick = (e: MapClickEvent) => {
+    const handleClick = (e: L.LeafletMouseEvent) => {
       const { lat, lng } = e.latlng;
       onLocationSelect(lat, lng);
     };
 
-    map.on('click', handleClick as any); // Cast to `any` to avoid type errors
+    map.on('click', handleClick);
 
     return () => {
-      map.off('click', handleClick as any);
+      map.off('click', handleClick);
     };
   }, [map, onLocationSelect]);
 
@@ -86,3 +82,4 @@ export default function LeafletMap({ center, onLocationSelect, weatherInfo }: Le
     </MapContainer>
   );
 }
+
