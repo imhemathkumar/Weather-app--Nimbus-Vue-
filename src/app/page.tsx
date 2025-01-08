@@ -175,7 +175,7 @@ export default function WeatherApp() {
           onSearchAction={handleSearch}
         />
         
-        <main className="container mx-auto p-4 space-y-6">
+        <main className="container mx-auto px-4 py-6 space-y-6">
           {loading && (
             <div className="flex justify-center items-center">
               <Loader2 className="h-8 w-8 animate-spin text-white" />
@@ -190,8 +190,8 @@ export default function WeatherApp() {
           
           {weatherData && (
             <>
-              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6">
-                <div className="col-span-1 sm:col-span-2 lg:col-span-2">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                <div className="md:col-span-2">
                   <WeatherDisplay
                     temperature={weatherData.temperature}
                     location={weatherData.location}
@@ -204,7 +204,7 @@ export default function WeatherApp() {
                   />
                 </div>
                 
-                <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-4">
                   <WeatherCard
                     date="Today"
                     temperature={weatherData.todaytemperature}
@@ -245,7 +245,7 @@ export default function WeatherApp() {
           )}
         </main>
 
-        <footer className="text-white/70 border-t-2 border-t-white/10 py-10 text-sm text-center">
+        <footer className="text-white/70 border-t border-white/10 py-6 px-4 text-center text-sm">
           © {new Date().getFullYear()} Nimbus Vue. All rights reserved.
         </footer>
       </div>
