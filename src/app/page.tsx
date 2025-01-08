@@ -43,7 +43,7 @@ export default function WeatherApp() {
     return formatTime(date)
   })
 
-  const fetchWeatherData = async (lat: number, lon: number) => {
+  const fetchWeatherData = useCallback(async (lat: number, lon: number) => {
     setLoading(true)
     setError(null)
     try {
@@ -83,7 +83,7 @@ export default function WeatherApp() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   const fetchForecastData = async (lat: number, lon: number) => {
     try {
