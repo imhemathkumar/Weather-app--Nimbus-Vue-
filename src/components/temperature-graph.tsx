@@ -59,7 +59,6 @@ export function TemperatureGraph({ data, labels }: Readonly<TemperatureGraphProp
       y: {
         grid: {
           color: 'rgba(255, 255, 255, 0.1)',
-          drawBorder: false,
         },
         ticks: {
           color: 'rgba(255, 255, 255, 0.8)',
