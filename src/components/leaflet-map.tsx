@@ -5,18 +5,12 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
-// Fix for default marker icon
-// Directly modify L.Icon.Default without checking for L.Icon
-const iconPrototype = L.Icon.Default.prototype as L.IconOptions;
-
-if (iconPrototype._getIconUrl) {
-  delete iconPrototype._getIconUrl;
-  L.Icon.Default.mergeOptions({
-    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
-    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
-  });
-}
+// Fix for default marker icon (use L.icon() to create a new icon)
+const customIcon = new L.Icon({
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon.png',
+  iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-icon-2x.png',
+  shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.1/images/marker-shadow.png',
+});
 
 interface LeafletMapProps {
   center: [number, number];
@@ -69,7 +63,7 @@ export default function LeafletMap({ center, onLocationSelect, weatherInfo }: Le
         attribution='&copy; <a href="https://www.openweathermap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={center}>
+      <Marker position={center} icon={customIcon}>
         {weatherInfo && (
           <Popup>
             <div className="text-center">
