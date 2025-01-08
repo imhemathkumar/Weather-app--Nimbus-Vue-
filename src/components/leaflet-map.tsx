@@ -1,6 +1,6 @@
 'use client'
 
-import L from 'leaflet'
+import * as L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { useEffect } from 'react'
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet'
@@ -25,13 +25,13 @@ interface LeafletMapProps {
 }
 
 function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: number) => void }) {
-  const map = useMap()
+  const map = useMap() as L.Map
 
   useEffect(() => {
     if (!map) return
 
-    const handleClick = (e: L.LeafletMouseEvent) => {
-      const { lat, lng } = e.latlng
+    const handleClick = (e: L.LeafletEvent) => {
+      const { lat, lng } = (e as L.LeafletMouseEvent).latlng
       onLocationSelect(lat, lng)
     }
 
@@ -46,7 +46,7 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: 
 }
 
 function ChangeView({ center }: { center: [number, number] }) {
-  const map = useMap()
+  const map = useMap() as L.Map
   map.setView(center, map.getZoom())
   return null
 }
