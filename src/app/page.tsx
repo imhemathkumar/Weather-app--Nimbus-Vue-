@@ -200,6 +200,7 @@ export default function WeatherApp() {
                     pressure={weatherData.pressure}
                     windSpeed={weatherData.windSpeed}
                     humidity={weatherData.humidity}
+                    hourlyTemperatures={weatherData.hourlyTemperatures}
                   />
                 </div>
                 
