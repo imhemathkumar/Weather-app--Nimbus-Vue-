@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet' // Use the correct imports for React-Leaflet
+ import { LeafletMap } from 'leaflet'
 
 // Dynamically import your custom map component (make sure it's the correct one)
 const LeafletMap = dynamic(() => import('./leaflet-map'), {
