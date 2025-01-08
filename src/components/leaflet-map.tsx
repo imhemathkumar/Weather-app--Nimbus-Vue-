@@ -5,11 +5,14 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react';
 import { MapContainer, Marker, Popup, TileLayer, useMap } from 'react-leaflet';
 
+// Explicitly import the icon to ensure it works with TypeScript
+import { Icon } from 'leaflet';
+
 // Fix for default marker icon
-if (L.Icon.Default) {
-  // We avoid 'any' here by casting to the correct type
+if (L.Icon) {
+  // We cast to the Icon constructor directly
   const iconPrototype = L.Icon.Default.prototype as L.IconOptions;
-  
+
   if (iconPrototype._getIconUrl) {
     delete iconPrototype._getIconUrl;
     L.Icon.Default.mergeOptions({
