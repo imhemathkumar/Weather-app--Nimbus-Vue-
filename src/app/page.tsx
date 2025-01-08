@@ -7,7 +7,7 @@ import { WeatherDisplay } from '@/components/weather-display'
 import { WeatherMap } from '@/components/weather-map'
 import { formatDate, formatTime } from '@/utils/date'
 import { Loader2 } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 
 interface WeatherData {
   temperature: number
@@ -18,12 +18,12 @@ interface WeatherData {
   humidity: number
   hourlyTemperatures: number[]
   coordinates: [number, number]
-  todaytemperature:number
-  tomorrowtemperature:number
-  dayaftertemperature:number
-  todayhumidity:number
-  tomorrowhumidity:number
-  dayafterhumidity:number
+  todaytemperature: number
+  tomorrowtemperature: number
+  dayaftertemperature: number
+  todayhumidity: number
+  tomorrowhumidity: number
+  dayafterhumidity: number
 }
 
 export default function WeatherApp() {
@@ -32,6 +32,7 @@ export default function WeatherApp() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
     setMounted(true)
   }, [])
@@ -134,7 +135,7 @@ export default function WeatherApp() {
     }
   }
 
-  const getInitialWeatherData = () => {
+  const getInitialWeatherData = useCallback(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -154,15 +155,14 @@ export default function WeatherApp() {
       // Fallback to a default location (e.g., New York City)
       fetchWeatherData(40.7128, -74.0060)
     }
-  }
+  }, [])
 
   useEffect(() => {
     getInitialWeatherData()
   }, [getInitialWeatherData])
 
-  
   if (!mounted) {
-    return null // or a loading placeholder
+    return null
   }
 
   return (
@@ -200,12 +200,11 @@ export default function WeatherApp() {
                     pressure={weatherData.pressure}
                     windSpeed={weatherData.windSpeed}
                     humidity={weatherData.humidity}
-                    hourlyTemperatures={weatherData.hourlyTemperatures}
                   />
                 </div>
                 
                 <div className="grid grid-cols-3 lg:grid-cols-1 gap-4">
-                <WeatherCard
+                  <WeatherCard
                     date="Today"
                     temperature={weatherData.todaytemperature}
                     humidity={weatherData.todayhumidity}
@@ -245,11 +244,11 @@ export default function WeatherApp() {
           )}
         </main>
 
-        <footer className="text-white/70 border-t-2 border-t-white/10 py-10 text-sm text-center ">
-        © {new Date().getFullYear()} Nimbus Vue.All rights reserved.
-
+        <footer className="text-white/70 border-t-2 border-t-white/10 py-10 text-sm text-center">
+          © {new Date().getFullYear()} Nimbus Vue. All rights reserved.
         </footer>
       </div>
     </div>
   )
 }
+
