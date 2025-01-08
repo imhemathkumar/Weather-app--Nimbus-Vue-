@@ -190,8 +190,8 @@ export default function WeatherApp() {
           
           {weatherData && (
             <>
-              <div className="grid lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
+              <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-4 sm:gap-6">
+                <div className="col-span-1 sm:col-span-2 lg:col-span-2">
                   <WeatherDisplay
                     temperature={weatherData.temperature}
                     location={weatherData.location}
@@ -204,7 +204,7 @@ export default function WeatherApp() {
                   />
                 </div>
                 
-                <div className="grid grid-cols-3 lg:grid-cols-1 gap-4">
+               <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-4">
                   <WeatherCard
                     date="Today"
                     temperature={weatherData.todaytemperature}
@@ -226,7 +226,7 @@ export default function WeatherApp() {
                 </div>
               </div>
 
-              <div className="grid lg:grid-cols-2 gap-6">
+             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <TemperatureGraph
                   data={weatherData.hourlyTemperatures}
                   labels={timeLabels}
