@@ -3,12 +3,14 @@
 import {
   CategoryScale,
   Chart as ChartJS,
+  ChartData,
   Filler,
   LinearScale,
   LineElement,
   PointElement,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 
@@ -28,7 +30,7 @@ interface TemperatureGraphProps {
 }
 
 export function TemperatureGraph({ data, labels }: Readonly<TemperatureGraphProps>) {
-  const chartData = {
+  const chartData: ChartData<'line'> = {
     labels,
     datasets: [
       {
@@ -104,11 +106,11 @@ export function TemperatureGraph({ data, labels }: Readonly<TemperatureGraphProp
         borderWidth: 1,
         displayColors: false,
         callbacks: {
-          title: (items: any) => {
+          title: (items: TooltipItem<'line'>[]) => {
             if (!items.length) return ''
             return `Time: ${items[0].label}`
           },
-          label: (item: any) => {
+          label: (item: TooltipItem<'line'>) => {
             return `Temperature: ${item.raw}°C`
           },
         },
