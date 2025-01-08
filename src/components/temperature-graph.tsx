@@ -11,6 +11,7 @@ import {
   Title,
   Tooltip,
   TooltipItem,
+  ChartOptions,
 } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 
@@ -47,7 +48,7 @@ export function TemperatureGraph({ data, labels }: Readonly<TemperatureGraphProp
     ],
   }
 
-  const options = {
+  const options: ChartOptions<'line'> = {
     responsive: true,
     maintainAspectRatio: false,
     interaction: {
@@ -66,7 +67,7 @@ export function TemperatureGraph({ data, labels }: Readonly<TemperatureGraphProp
           font: {
             size: 12,
           },
-          callback: (value: number) => `${value}°C`,
+          callback: (value: string | number) => `${value}°C`,
         },
         min: Math.min(...data) - 2,
         max: Math.max(...data) + 2,
