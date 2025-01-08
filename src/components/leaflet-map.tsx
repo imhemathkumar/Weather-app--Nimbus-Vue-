@@ -29,9 +29,11 @@ function MapEvents({ onLocationSelect }: { onLocationSelect: (lat: number, lon: 
     if (!map) return;
 
     const handleClick = (e: L.LeafletMouseEvent | L.LeafletEvent) => {
-      const { lat, lng } = (e as L.LeafletMouseEvent).latlng; // Type assertion for latlng
-      onLocationSelect(lat, lng);
-    };
+  if ('latlng' in e) {
+    const { lat, lng } = e.latlng;
+    onLocationSelect(lat, lng);
+  }
+};
 
     map.on('click', handleClick);
 
